@@ -1,0 +1,62 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/hmac-md5.min.js"></script>
+	<style>
+		.title {
+			font-family:fantasy;
+			font-size: 100px; 
+			position: absolute;
+			top: 50%; 
+			left: 50%; 
+			width: 1024px; 
+			height: 400px; 
+			margin-top: -200px;
+			margin-left: -512px;
+		}
+		.passcode {
+			color: #0F4C81; 
+			text-align: center;
+		}
+		.hint {
+			color: gray; 
+		}
+		button {
+			font-family:fantasy;
+			font-size: 20px;
+			color: gray;
+			width: 100px;
+			height: 40px;
+		}
+	</style>
+</head>
+<body>
+	<button id="phantom">BUTTON</button>
+	<div id="passcode" class="title passcode" hidden>6e85bb90</div>
+	<div id="hint" class="title hint">Find the button and click 100 times! You will get the passcode!</div>
+	<script>
+		$(function(){
+			var count = 0;
+			$('button').on('click', function recu(){
+				if (++count == 100) {
+					$(this).remove();
+					$('#passcode').show();
+					$('#hint').hide();
+					return;
+				}
+				var new_button= $('<button id="phantom" type="button">BUTTON</button>').on('click', recu);
+				new_button.css({
+					"position": "absolute",
+					"top": Math.random() * $(window).height() * 0.9,
+					"left": Math.random() * $(window).width() * 0.9
+				});
+				$('#passcode').text(CryptoJS.MD5($('#passcode').text()).toString().substring(0, 8));
+				$(this).remove();
+				$("body").append(new_button);
+				setTimeout(function(){new_button.remove()}, 800);
+			});
+		});
+	</script>
+</body>
+</html>
